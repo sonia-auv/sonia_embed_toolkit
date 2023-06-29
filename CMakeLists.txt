@@ -27,7 +27,7 @@ target_compile_options(${PROJECT_NAME} PUBLIC -std=c++1y -Wall -Wfloat-conversio
 
 target_include_directories(${PROJECT_NAME} PUBLIC src include tests)
 
-# file(COPY ${INCLUDE_HEADERS} DESTINATION include)
+file(COPY ${INCLUDE_HEADERS} DESTINATION include)
 
 ###############################################################################
 ## Dependencies ###############################################################

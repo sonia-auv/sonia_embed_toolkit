@@ -6,7 +6,6 @@
 
 namespace sonia_embed_toolkit
 {
-    
     class RS485Toolkit
     {
         public:

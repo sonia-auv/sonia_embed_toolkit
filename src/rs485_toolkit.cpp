@@ -12,11 +12,11 @@ namespace sonia_embed_toolkit
     {
         RS485Toolkit::convert_message_to_serial(id, serial_message, size);
         
-        // TODO build message...
+        // TODO Encode message...
         
         memcpy(&serial_message[3], message, size);
         
-        // with interleaving
+        // TODO interleaving
         return 0;
     }
 
