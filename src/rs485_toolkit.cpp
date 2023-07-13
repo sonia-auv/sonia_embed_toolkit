@@ -7,6 +7,7 @@ namespace sonia_embed_toolkit
 {
     const uint8_t RS485Toolkit::START_BYTE = 0x55;
     const uint8_t RS485Toolkit::HEADER_SIZE = 3;
+    const uint8_t RS485Toolkit::MAX_MSG_SIZE = 112;
     
     uint8_t RS485Toolkit::convert_message_to_serial(const uint8_t id, const uint8_t size, const uint8_t* message, uint8_t* serial_message)
     {

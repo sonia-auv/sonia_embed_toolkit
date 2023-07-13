@@ -11,6 +11,7 @@ namespace sonia_embed_toolkit
         public:
         static const uint8_t START_BYTE;
         static const uint8_t HEADER_SIZE;
+        static const uint8_t MAX_MSG_SIZE;
 
         static uint8_t convert_message_to_serial(const uint8_t id, const uint8_t size, const uint8_t* message, uint8_t* serial_message);
         static uint8_t convert_message_to_serial(const uint8_t id, const uint8_t size, const uint16_t* message, uint8_t* serial_message);
