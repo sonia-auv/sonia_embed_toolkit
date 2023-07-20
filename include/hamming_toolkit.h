@@ -15,9 +15,10 @@ namespace sonia_embed_toolkit
             static int decode_hamming_74_message(uint8_t* encoded_data, size_t encoded_data_size, uint8_t* decoded_data, size_t decoded_data_size);
             static int encode_hamming_74_message(uint8_t* data, size_t data_size, uint8_t* encoded_data, size_t encoded_data_size);
 
-            static void interlace_message(uint8_t* data, size_t data_size, uint8_t* interlaced_data);
-            static void deinterlace_message(uint8_t* data, size_t data_size, uint8_t* interlaced_data);
-
             static uint8_t get_bit(uint8_t data, uint8_t pos);
+
+            static void interleaving_pre_pack(uint8_t* data, size_t data_size, uint8_t* interleaved_data);
+            static void deinterleaving_post_depack(uint8_t* data, size_t data_size, uint8_t* interleaved_data);
+
     };
 }

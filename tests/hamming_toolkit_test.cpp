@@ -22,21 +22,19 @@ namespace sonia_embed_toolkit
         ASSERT_EQ(HammingToolkit::encode_hamming_74_message(data,11,encoded_data,11), -1);
     };
 
-    TEST(HammingToolkitTest, INTERLACE)
+    TEST(HammingToolkitTest, INTERLEAVE)
     {
-        char message[11] = "0123456789";
-        char deinterlace_message_data[11];
-        
-        uint8_t interlace_data[10];
+        uint8_t data[5] = { 0x1, 0x7F, 0x70, 0x0F, 0x55 };
+        uint8_t deinterleave_data[5];
 
-        HammingToolkit::interlace_message((uint8_t *)message, 10, interlace_data);
-        HammingToolkit::deinterlace_message((uint8_t*)deinterlace_message_data, 10, interlace_data);
+        uint8_t interleave_data[5];
 
-        deinterlace_message_data[10] = '\0';
+        HammingToolkit::interleaving_pre_pack(data, 5, interleave_data);
+        HammingToolkit::deinterleaving_post_depack(deinterleave_data, 5, interleave_data);
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
         {
-            ASSERT_EQ(message[i], deinterlace_message_data[i]);
+            ASSERT_EQ(data[i], deinterleave_data[i]);
         }
     };
 
@@ -58,42 +56,37 @@ namespace sonia_embed_toolkit
 
     TEST(HammingToolkitTest, HAMMING)
     {
+
+
         const size_t SIZE_MESSAGE = 11;
-        const size_t SIZE_ENCODED_DATA = SIZE_MESSAGE * 2;
+        const size_t SIZE_ENCODED_DATA = SIZE_MESSAGE * 2; //number of group of 4 bits 
         const size_t SIZE_DATA_PACK = (size_t)ceil((double)(SIZE_ENCODED_DATA * 7)/8);
 
         char message[SIZE_MESSAGE + 1] = "01234567890";
         uint8_t encoded_data[SIZE_ENCODED_DATA] = { 0 };
-        uint8_t* encoded_data_pack = (uint8_t*)malloc(SIZE_DATA_PACK * sizeof(uint8_t));
-        uint8_t* encoded_data_pack_interlaced = (uint8_t*)malloc(SIZE_DATA_PACK * sizeof(uint8_t));
-        uint8_t* encoded_data_pack_deinterlaced = (uint8_t*)malloc(SIZE_DATA_PACK * sizeof(uint8_t));
-        uint8_t encoded_data_unpack[SIZE_ENCODED_DATA] = { 0 };
+        uint8_t encoded_data_interleaved[SIZE_ENCODED_DATA] = { 0 };
+        uint8_t* encoded_data_interleaved_pack = (uint8_t*)malloc(SIZE_DATA_PACK * sizeof(uint8_t));
+        uint8_t encoded_data_unpack_interleaved[SIZE_ENCODED_DATA] = { 0 };
+        uint8_t encoded_data_unpack_deinterlaced[SIZE_ENCODED_DATA] = { 0 };
+
         char decoded_message[SIZE_MESSAGE + 1];
 
-        /*char message[12] = "01234567890";
-        uint8_t encoded_data[22] = {0};
-        uint8_t encoded_data_pack[20] = {0};
-        uint8_t encoded_data_pack_interlaced[20];
-        uint8_t encoded_data_pack_deinterlaced[20];
-        uint8_t encoded_data_unpack[22] = {0};
-        char decoded_message[12];*/
-
         HammingToolkit::encode_hamming_74_message((uint8_t*)message, SIZE_MESSAGE, encoded_data, SIZE_ENCODED_DATA);
-        HammingToolkit::pack_7_bits_values(encoded_data, SIZE_ENCODED_DATA, encoded_data_pack, SIZE_ENCODED_DATA);
-        HammingToolkit::interlace_message(encoded_data_pack, SIZE_ENCODED_DATA, encoded_data_pack_interlaced);
+        HammingToolkit::interleaving_pre_pack(encoded_data, SIZE_ENCODED_DATA, encoded_data_interleaved);
+        HammingToolkit::pack_7_bits_values(encoded_data_interleaved, SIZE_ENCODED_DATA, encoded_data_interleaved_pack, SIZE_DATA_PACK);
         
-
         //force data corruption
-        encoded_data_pack_interlaced[4] ^= 0xFF;
-        encoded_data_pack_interlaced[5] ^= 0xFF;
+        encoded_data_interleaved_pack[0] ^= 0xFF;
+        encoded_data_interleaved_pack[1] ^= 0xFF;
+        encoded_data_interleaved_pack[2] ^= 0x3F;
 
-        HammingToolkit::deinterlace_message(encoded_data_pack_deinterlaced, SIZE_ENCODED_DATA, encoded_data_pack_interlaced);
-        HammingToolkit::unpack_7_bits_values(encoded_data_pack_deinterlaced, SIZE_ENCODED_DATA, encoded_data_unpack, SIZE_ENCODED_DATA);
-        HammingToolkit::decode_hamming_74_message(encoded_data_unpack, SIZE_ENCODED_DATA, (uint8_t*)decoded_message, SIZE_MESSAGE);
+        HammingToolkit::unpack_7_bits_values(encoded_data_interleaved_pack, SIZE_DATA_PACK, encoded_data_unpack_interleaved, SIZE_ENCODED_DATA);
+        HammingToolkit::deinterleaving_post_depack(encoded_data_unpack_deinterlaced, SIZE_ENCODED_DATA, encoded_data_unpack_interleaved);
+        HammingToolkit::decode_hamming_74_message(encoded_data_unpack_deinterlaced, SIZE_ENCODED_DATA, (uint8_t*)decoded_message, SIZE_MESSAGE);
 
         for (size_t i = 0; i < SIZE_MESSAGE; i++)
         {
-            ASSERT_EQ(message[i],decoded_message[i]);
+            ASSERT_EQ(message[i], decoded_message[i]);
         }
     };
 

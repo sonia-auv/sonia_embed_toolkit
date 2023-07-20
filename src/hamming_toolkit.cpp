@@ -135,25 +135,30 @@ namespace sonia_embed_toolkit
         return 0;
     }
 
-    void HammingToolkit::interlace_message(uint8_t* data, size_t data_size, uint8_t* interlaced_data)
+    uint8_t HammingToolkit::get_bit(uint8_t data, uint8_t pos)
+    {
+        return (data >> pos) & 1;
+    }
+
+    void HammingToolkit::interleaving_pre_pack(uint8_t* data, size_t data_size, uint8_t* interleaved_data)
     {
 
         uint8_t current_byte = 0;
         uint8_t current_bit_write = 0;
         uint8_t current_bit_read = 0;
         uint8_t data_index = 0;
-        uint8_t interlaced_data_index = 0;
-        while (interlaced_data_index < data_size)
+        uint8_t interleaved_data_index = 0;
+        while (interleaved_data_index < data_size)
         {
             current_byte |= get_bit(data[data_index], current_bit_read) << current_bit_write;
 
             current_bit_write++;
-            if (current_bit_write == 8)
+            if (current_bit_write == 7)
             {
-                interlaced_data[interlaced_data_index] = current_byte;
+                interleaved_data[interleaved_data_index] = current_byte;
                 current_bit_write = 0;
                 current_byte = 0;
-                interlaced_data_index++;
+                interleaved_data_index++;
             }
 
             data_index++;
@@ -165,33 +170,34 @@ namespace sonia_embed_toolkit
         }
     }
 
-    void HammingToolkit::deinterlace_message(uint8_t* data, size_t data_size, uint8_t* interlaced_data)
+    void HammingToolkit::deinterleaving_post_depack(uint8_t* data, size_t data_size, uint8_t* interleaved_data)
     {
+
         uint8_t current_byte = 0;
         uint8_t current_bit_write = 0;
         uint8_t current_bit_read = 0;
         uint8_t data_index = 0;
-        uint8_t interlaced_data_index = 0;
+        uint8_t interleaved_data_index = 0;
 
         for (size_t i = 0; i < data_size; i++)
         {
             data[i] = 0;
         }
 
-        while (interlaced_data_index < data_size)
+        while (interleaved_data_index < data_size)
         {
             if (current_bit_read == 0)
             {
-                current_byte = interlaced_data[interlaced_data_index];
+                current_byte = interleaved_data[interleaved_data_index];
             }
 
             data[data_index] |= get_bit(current_byte, current_bit_read) << current_bit_write;
 
             current_bit_read++;
-            if (current_bit_read == 8)
+            if (current_bit_read == 7)
             {
                 current_bit_read = 0;
-                interlaced_data_index++;
+                interleaved_data_index++;
             }
 
             data_index++;
@@ -205,8 +211,4 @@ namespace sonia_embed_toolkit
         }
     }
 
-    uint8_t HammingToolkit::get_bit(uint8_t data, uint8_t pos)
-    {
-        return (data >> pos) & 1;
-    }
 }
