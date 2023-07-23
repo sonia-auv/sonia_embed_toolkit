@@ -14,7 +14,7 @@ namespace sonia_embed_toolkit
     const uint8_t RS485Toolkit::PACK_HEADER_SIZE = (size_t)ceil((double)(RS485Toolkit::HEADER_SIZE*2*7)/8);
     const uint8_t RS485Toolkit::PACK_MSG_SIZE = (size_t)ceil((double)(RS485Toolkit::MAX_MSG_SIZE*2*7)/8);
     
-    size_ts RS485Toolkit::convert_message_to_serial(const uint8_t id, const uint8_t size, const uint8_t* message, uint8_t* serial_message)
+    size_t RS485Toolkit::convert_message_to_serial(const uint8_t id, const uint8_t size, const uint8_t* message, uint8_t* serial_message)
     {
         uint8_t header_tram[PACK_HEADER_SIZE];
         RS485Toolkit::convert_header_to_serial(id, header_tram, size);
