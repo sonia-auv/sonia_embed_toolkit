@@ -45,7 +45,7 @@ namespace sonia_embed_toolkit
         return 0;
     }
 
-    int HammingToolkit::unpack_7_bits_values(uint8_t* pack_values, size_t size_pack_values, uint8_t* unpack_values, size_t size_unpack_values )
+    int HammingToolkit::unpack_7_bits_values(const uint8_t* pack_values, size_t size_pack_values, uint8_t* unpack_values, size_t size_unpack_values )
     {
         int8_t current_writing_pos = 0;
         size_t current_writing_index = 0;
@@ -89,7 +89,7 @@ namespace sonia_embed_toolkit
     }
 
 
-    int HammingToolkit::decode_hamming_74_message(uint8_t* encoded_data, size_t encoded_data_size, uint8_t* decoded_data, size_t decoded_data_size)
+    int HammingToolkit::decode_hamming_74_message(const uint8_t* encoded_data, size_t encoded_data_size, uint8_t* decoded_data, size_t decoded_data_size)
     {
         size_t nb_byte_decode = encoded_data_size / 2;
         uint8_t current_decoded_value;
@@ -121,7 +121,7 @@ namespace sonia_embed_toolkit
 
 
 
-    int HammingToolkit::encode_hamming_74_message(uint8_t* data, size_t data_size, uint8_t* encoded_data, size_t encoded_data_size)
+    int HammingToolkit::encode_hamming_74_message(const uint8_t* data, size_t data_size, uint8_t* encoded_data, size_t encoded_data_size)
     {
         if (encoded_data_size < 2 * data_size)
         {

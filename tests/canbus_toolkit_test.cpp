@@ -76,12 +76,12 @@ namespace sonia_embed_toolkit
     TEST(CanBusToolkitTest, RECV_SINGLE_CAN_MSG)
     {
         uint8_t can_msg[3] = {0, 55, 110};
-        uint8_t msg[CanBusToolkit::MAX_MSG_SIZE];
+        uint8_t msg[CanBusToolkit::MAX_MSG_SIZE] = {0};
         ASSERT_EQ(CanBusToolkit::convert_from_can(3, can_msg, msg), 2);
         ASSERT_EQ(msg[0], 55);
         ASSERT_EQ(msg[1], 110);
         ASSERT_EQ(msg[2], NULL);
-    }
+    };
 
     TEST(CanBusToolkitTest, RECV_LARGE_CAN_MSG)
     {
