@@ -8,8 +8,8 @@ namespace sonia_embed_toolkit
 {    
     TEST(HammingToolkitTest, HAMMING_DECODE_SIZE_CHECK)
     {
-        uint8_t encoded_data[11];
-        uint8_t decoded_data[5];
+        uint8_t encoded_data[11] = {0};
+        uint8_t decoded_data[5] = {0};
 
         ASSERT_EQ(HammingToolkit::decode_hamming_74_message(encoded_data,11,decoded_data,5), -1);
     };
@@ -17,9 +17,16 @@ namespace sonia_embed_toolkit
     TEST(HammingToolkitTest, HAMMING_ENCODE_SIZE_CHECK)
     {
         uint8_t encoded_data[11];
-        uint8_t data[11];
+        uint8_t data[11] = {0};
         //if encoded_data is not at leat twice the size of data, return -1
         ASSERT_EQ(HammingToolkit::encode_hamming_74_message(data,11,encoded_data,11), -1);
+        uint8_t encoded_data_1[20];
+        uint8_t data_1[11];
+        ASSERT_EQ(HammingToolkit::encode_hamming_74_message(data_1,11,encoded_data_1,20), -1);
+
+        uint8_t encoded_data_2[22];
+        uint8_t data_2[11];
+        ASSERT_EQ(HammingToolkit::encode_hamming_74_message(data_2,11,encoded_data_2,22), 0);
     };
 
     TEST(HammingToolkitTest, INTERLEAVE)

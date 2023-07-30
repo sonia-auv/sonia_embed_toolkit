@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage -Wextra")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 project("sonia_embed_toolkit")
