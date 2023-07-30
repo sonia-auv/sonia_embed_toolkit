@@ -37,7 +37,7 @@ namespace sonia_embed_toolkit
         return RS485Toolkit::convert_message_to_serial(id, size * sizeof(uint16_t), (uint8_t*)message, serial_message);
     }
 
-    size_t RS485Toolkit::convert_header_to_serial(const uint8_t id, uint8_t* header_tram, const uint8_t size)
+    void RS485Toolkit::convert_header_to_serial(const uint8_t id, uint8_t* header_tram, const uint8_t size)
     {
         uint8_t header[RS485Toolkit::HEADER_SIZE] = {RS485Toolkit::START_BYTE, id, size};
         uint8_t enc_header[RS485Toolkit::HEADER_SIZE*2];
@@ -49,8 +49,6 @@ namespace sonia_embed_toolkit
         HammingToolkit::pack_7_bits_values(inter_header, RS485Toolkit::HEADER_SIZE*2, packed_header, RS485Toolkit::PACK_HEADER_SIZE);
 
         memcpy(header_tram, &packed_header, RS485Toolkit::PACK_HEADER_SIZE);
-
-        return 0;
     }
 
     std::pair<uint8_t, uint8_t> RS485Toolkit::convert_serial_to_message(const uint8_t* serial_msg, uint8_t* message)
@@ -72,7 +70,7 @@ namespace sonia_embed_toolkit
         return id_size;
     }
 
-    size_t RS485Toolkit::convert_serial_to_header(const uint8_t* serial_msg, uint8_t* header)
+    void RS485Toolkit::convert_serial_to_header(const uint8_t* serial_msg, uint8_t* header)
     {
         uint8_t packed_header[PACK_HEADER_SIZE];
         memcpy(packed_header, serial_msg, PACK_HEADER_SIZE);
@@ -83,8 +81,6 @@ namespace sonia_embed_toolkit
         HammingToolkit::deinterleaving_post_depack(enc_header, HEADER_SIZE*2, interleaved_header);
 
         HammingToolkit::decode_hamming_74_message(enc_header, HEADER_SIZE*2, header, HEADER_SIZE);
-
-        return 0;
     }
 
 } // namespace sonia_embed
