@@ -8,10 +8,25 @@ namespace sonia_embed_toolkit
     class RS485Toolkit
     {
     public:
+        /**
+         * @brief The start byte for RS485 messages.
+        */
         static const uint8_t START_BYTE;
+        /**
+         * @brief Size of the header.
+        */
         static const uint8_t HEADER_SIZE;
+        /**
+         * @brief Max size for the messages.
+        */
         static const uint8_t MAX_MSG_SIZE;
+        /**
+         * @brief Max size for packed and encoded header.
+        */
         static const uint8_t PACK_HEADER_SIZE;
+        /**
+         * @brief Max size for packed and encoded message.
+        */
         static const uint8_t PACK_MSG_SIZE;
 
         /**
